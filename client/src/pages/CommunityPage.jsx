@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Header from "../components/Header";
+
 
 const CommunityPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -7,13 +9,13 @@ const CommunityPage = () => {
 
   // Fetch all blogs from the backend
   useEffect(() => {
-    axios
-      .get("/api/blogs")
-      .then((response) => {
-        setBlogs(response.data);
-      })
-      .catch((error) => console.error("Error fetching blogs:", error));
-  }, []);
+  axios
+    .get("http://localhost:3000/api/blogs") // Use the correct backend URL
+    .then((response) => {
+      setBlogs(response.data.blogs || []); // Handle potential response format variations
+    })
+    .catch((error) => console.error("Error fetching blogs:", error));
+}, []);
 
   // Handle input changes for new blog
   const handleChange = (e) => {
@@ -23,20 +25,22 @@ const CommunityPage = () => {
 
   // Handle blog submission
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Send the new blog post to the backend
-    axios
-      .post("/api/blogs", newBlog)
-      .then((response) => {
-        setBlogs([...blogs, response.data]); // Add the new blog to the state
-        setNewBlog({ title: "", content: "", author: "" }); // Clear the form
-      })
-      .catch((error) => console.error("Error posting blog:", error));
-  };
+  axios
+    .post("http://localhost:3000/api/blogs", newBlog) // Use the correct backend URL
+    .then((response) => {
+      setBlogs((prevBlogs) => [...prevBlogs, response.data.blog]); // Add new blog to state
+      setNewBlog({ title: "", content: "", author: "" }); // Clear form
+    })
+    .catch((error) => console.error("Error posting blog:", error));
+};
 
   return (
+    
+    
     <div className="container mx-auto p-6">
+      
       <h1 className="text-3xl font-bold mb-4">Community Blogs</h1>
 
       {/* Blog Form */}
@@ -88,13 +92,14 @@ const CommunityPage = () => {
       <div>
         <h2 className="text-xl font-semibold mb-4">Latest Blogs</h2>
         <div className="space-y-4">
-          {blogs.map((blog) => (
-            <div key={blog.id} className="bg-white p-4 rounded-lg shadow-md">
-              <h3 className="text-2xl font-semibold text-teal-600">{blog.title}</h3>
-              <p className="text-sm text-gray-600">By {blog.author}</p>
-              <p className="mt-2 text-gray-800">{blog.content}</p>
-            </div>
-          ))}
+          {blogs.map((blog, index) => (
+  <div key={blog._id || index} className="bg-white p-4 rounded-lg shadow-md">
+    <h3 className="text-2xl font-semibold text-teal-600">{blog.title}</h3>
+    <p className="text-sm text-gray-600">By {blog.author}</p>
+    <p className="mt-2 text-gray-800">{blog.content}</p>
+  </div>
+))}
+
         </div>
       </div>
     </div>
