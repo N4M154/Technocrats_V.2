@@ -15,9 +15,7 @@ export default function Home() {
   ];
 
   const articles = [
-    "Mental Health Benefits of Exercise",
-    "The Importance of Sleep for Mental Health",
-    "How to Manage Stress Effectively",
+    "Mental Health Benefits of Exercise"
   ];
 
   const fetchJoke = async () => {
