@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import Footer from "./components/Footer";
 import BreathingGame from "./pages/BreathingGame";
+import Community from "./pages/CommunityPage";
 //import TrackMood from "./pages/track-mood";
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/community" element={<Community/>}/>
 
         {/* <Route path="/track-mood" element={<TrackMood />} /> */}
         <Route element={<PrivateRoute />}>

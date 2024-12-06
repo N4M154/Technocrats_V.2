@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import blogRoutes from "./routes/blog.route.js"; // Import the blog routes
+
 import cookieParser from "cookie-parser";
 import path from "path";
 dotenv.config();
@@ -20,23 +22,23 @@ const __dirname = path.resolve();
 
 const app = express();
 
+app.use(express.json()); // Parse JSON bodies
+app.use(cookieParser()); // Parse cookies
+
+// API Routes
+app.use("/api/blog", blogRoutes); // Blog routes
+app.use("/api/user", userRoutes); // User routes
+app.use("/api/auth", authRoutes); // Auth routes
+
+// Serve static files
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
+// Catch-all route for React
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
-app.use(express.json());
-
-app.use(cookieParser());
-
-app.listen(3000, () => {
-  console.log("Server listening on port 3000");
-});
-
-app.use("/api/user", userRoutes);
-app.use("/api/auth", authRoutes);
-
+// Error handling middleware
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
@@ -45,4 +47,9 @@ app.use((err, req, res, next) => {
     message,
     statusCode,
   });
+});
+
+// Start the server
+app.listen(3000, () => {
+  console.log("Server listening on port 3000");
 });
