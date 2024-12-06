@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.7.9",
+    "cors": "^2.8.5",
     "firebase": "^10.1.0",
     "lucide-react": "^0.468.0",
     "mern-auth": "file:..",
