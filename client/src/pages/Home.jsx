@@ -1,7 +1,7 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import axios from "axios";
 
 export default function Home() {
   const [musicPlaying, setMusicPlaying] = useState(null);
@@ -12,7 +12,6 @@ export default function Home() {
   const [recommendations, setRecommendations] = useState([]);
   const [error, setError] = useState("");
 
-  // Article state and loading state
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -57,12 +56,9 @@ export default function Home() {
       );
       const data = await response.json();
 
-      // Randomly select an article and check for image URL
       if (data.articles && data.articles.length > 0) {
         const randomIndex = Math.floor(Math.random() * data.articles.length);
         const randomArticle = data.articles[randomIndex];
-
-        // Set the article and image if available
         setArticle(randomArticle);
       } else {
         setArticle("No articles found.");
@@ -93,187 +89,144 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white min-h-screen flex flex-col items-center px-4 md:px-8">
+    <div className="min-h-screen bg-white py-8 px-6">
       <Header />
 
-      <div className="mt-10 space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-teal-700 text-2xl font-bold">
-            Track Your Mood and Sleep
-          </h2>
-          <div className="space-x-4">
-            <Link
-              to="/track-mood"
-              className="bg-teal-600 text-white py-2 px-6 rounded-lg hover:bg-teal-500 transition duration-300"
-            >
-              Track Mood
-            </Link>
-            <Link
-              to="/track-sleep"
-              className="bg-teal-600 text-white py-2 px-6 rounded-lg hover:bg-teal-500 transition duration-300"
-            >
-              Track Sleep
-            </Link>
-          </div>
-        </div>
-        <div className="text-center space-y-6 mt-12">
-          <h2 className="text-teal-700 text-2xl font-bold">Boost Your Mood</h2>
-          <div className="space-x-4">
-            <button
-              onClick={() => setMusicPlaying(musicOptions)}
-              className="bg-teal-600 text-white py-2 px-6 rounded-lg hover:bg-teal-500 transition duration-300"
-            >
-              Listen to Music
-            </button>
-            <button
-              onClick={() => {
-                setShowArticles(true);
-                fetchArticle(); // Trigger article fetch when clicked
-              }}
-              className="bg-teal-600 text-white py-2 px-6 rounded-lg hover:bg-teal-500 transition duration-300"
-            >
-              Learn About Mental Health
-            </button>
-            <button
-              onClick={fetchJoke}
-              className="bg-teal-600 text-white py-2 px-6 rounded-lg hover:bg-teal-500 transition duration-300"
-            >
-              Joke of the Day
-            </button>
-          </div>
-        </div>
-        {/* Breathing Exercise section */}
-        <div className="text-center mt-12">
-          <button
-            onClick={() => navigate("/breathinggame")}
-            className="bg-teal-600 text-white py-2 px-6 rounded-lg hover:bg-teal-500 transition duration-300"
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Card 1: Track Mood */}
+        <div className="bg-white shadow-xl rounded-lg p-6 transition-transform transform hover:scale-105 duration-300 ease-in-out border border-teal-500">
+          <h3 className="text-xl font-semibold text-teal-700 mb-4">Track Your Mood</h3>
+          <p className="text-teal-500 mb-4">Understand your emotional state with easy tracking features.</p>
+          <Link
+            to="/track-mood"
+            className="inline-block bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition-colors duration-300"
           >
-            Breathing Exercise
+            Track Mood
+          </Link>
+        </div>
+
+        {/* Card 2: Track Sleep */}
+        <div className="bg-white shadow-xl rounded-lg p-6 transition-transform transform hover:scale-105 duration-300 ease-in-out border border-teal-500">
+          <h3 className="text-xl font-semibold text-teal-700 mb-4">Track Your Sleep</h3>
+          <p className="text-teal-500 mb-4">Improve your sleep patterns with our tracking tool.</p>
+          <Link
+            to="/track-sleep"
+            className="inline-block bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition-colors duration-300"
+          >
+            Track Sleep
+          </Link>
+        </div>
+
+        {/* Card 3: Boost Your Mood */}
+        <div className="bg-white shadow-xl rounded-lg p-6 transition-transform transform hover:scale-105 duration-300 ease-in-out border border-teal-500">
+          <h3 className="text-xl font-semibold text-teal-700 mb-4">Boost Your Mood</h3>
+          <p className="text-teal-500 mb-4">Listen to music that helps improve your mood.</p>
+          <button
+            onClick={() => setMusicPlaying(musicOptions)}
+            className="inline-block bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition-colors duration-300"
+          >
+            Listen to Music
           </button>
         </div>
-        {/* Render Music Options */}
-        {musicPlaying && (
-          <div className="flex space-x-6 bg-gray-700 shadow-xl shadow-pink-600 bg-opacity-70 p-4 rounded-lg">
-            <div className="w-full max-w-md p-4 mb-6 bg-gradient-to-r from-green-700 via-slate-700 to-blue-800 border border-zinc-500 rounded-lg shadow-lg shadow-teal-600">
-              <h1 className="text-3xl flex justify-center font-bold mb-6 text-teal-500">
-                DoReMi
-              </h1>
-              <div className="mb-6">
-                <label className="block mb-2 text-xl font-semibold text-teal-100">
-                  Select your mood:
-                </label>
-                <div className="flex">
-                  <select
-                    value={selectedMood}
-                    onChange={(e) => setSelectedMood(e.target.value)}
-                    className="p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-pink-500 flex-grow bg-pink-200"
-                  >
-                    <option value="">Select...</option>
-                    {moods.map((mood) => (
-                      <option key={mood} value={mood}>
-                        {mood.charAt(0).toUpperCase() + mood.slice(1)}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    onClick={fetchRecommendations}
-                    className="p-2 bg-pink-500 text-white rounded-r-md hover:bg-blue-600 transition duration-200"
-                  >
-                    Get Music Recommendations
-                  </button>
-                </div>
-                {error && <p className="text-red-500 mt-4">{error}</p>}
-              </div>
-            </div>
-            {/* Recommendations Table */}
-            {recommendations.length > 0 && (
-              <div className="w-full max-w-lg max-h-96 overflow-y-auto bg-transparent rounded-xl shadow-lg shadow-pink-300 p-4">
-                <div className="overflow-x-auto">
-                  <table className="min-w-full bg-gradient-to-r from-green-200 to-blue-300 border border-gray-300 ">
-                    <thead>
-                      <tr>
-                        <th className="py-2 px-4 bg-transparent text-orange-600 border-b font-bold text-xl">
-                          Song
-                        </th>
-                        <th className="py-2 px-4 bg-transparent border-b font-bold text-xl text-orange-600">
-                          Artist
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {recommendations.map((track, index) => (
-                        <tr
-                          key={`${track.name}-${track.artist.name}-${index}`}
-                          className="hover:bg-pink-100"
-                        >
-                          <td className="border px-4 py-2 font-medium text-green-800">
-                            {track.name}
-                          </td>
-                          <td className="border px-4 py-2 font-medium text-sky-800">
-                            {track.artist.name}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-        {/* Articles Slider */}
-        {showArticles && (
-          <div className="mt-6 space-x-4 flex overflow-x-scroll">
-            {article ? (
-              <div className="min-w-[250px] bg-teal-100 p-4 rounded-lg shadow-md">
-                <h4 className="font-semibold text-teal-700">{article.title}</h4>
-                <p>{article.description}</p>
-                {article.urlToImage && (
-                  <img
-                    src={article.urlToImage}
-                    alt="Article Image"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "400px",
-                      marginTop: "10px",
-                    }}
-                  />
-                )}
-                <a
-                  href={article.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-teal-500 mt-4"
-                >
-                  Read more
-                </a>
-              </div>
-            ) : loading ? (
-              <div>Loading...</div>
-            ) : (
-              <div>No articles found or an error occurred.</div>
-            )}
-          </div>
-        )}
-        {/* Joke Popup */}
 
-        {showJoke && (
-          <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
-            <div className="bg-white p-6 rounded-lg max-w-md w-full text-center">
-              <h3 className="text-teal-700 text-xl font-bold">
-                Joke of the Day
-              </h3>
-              <p className="text-teal-600 mt-4">{joke}</p>
-              <button
-                onClick={() => setShowJoke(false)}
-                className="mt-6 bg-teal-600 text-white py-2 px-6 rounded-lg hover:bg-teal-500 transition duration-300"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Card 4: Learn About Mental Health */}
+        <div className="bg-white shadow-xl rounded-lg p-6 transition-transform transform hover:scale-105 duration-300 ease-in-out border border-teal-500">
+          <h3 className="text-xl font-semibold text-teal-700 mb-4">Learn About Mental Health</h3>
+          <p className="text-teal-500 mb-4">Stay informed with the latest mental health articles.</p>
+          <button
+            onClick={() => {
+              setShowArticles(true);
+              fetchArticle();
+            }}
+            className="inline-block bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition-colors duration-300"
+          >
+            Read Articles
+          </button>
+        </div>
+
+        {/* Card 5: Joke of the Day */}
+        <div className="bg-white shadow-xl rounded-lg p-6 transition-transform transform hover:scale-105 duration-300 ease-in-out border border-teal-500">
+          <h3 className="text-xl font-semibold text-teal-700 mb-4">Joke of the Day</h3>
+          <p className="text-teal-500 mb-4">Lighten up with a fun joke every day.</p>
+          <button
+            onClick={fetchJoke}
+            className="inline-block bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition-colors duration-300"
+          >
+            Get Joke
+          </button>
+        </div>
+
+        {/* Breathing Exercise Button */}
+        <div className="bg-white shadow-xl rounded-lg p-6 transition-transform transform hover:scale-105 duration-300 ease-in-out border border-teal-500">
+          <h3 className="text-xl font-semibold text-teal-700 mb-4">Breathing Exercise</h3>
+          <p className="text-teal-500 mb-4">Calm your mind with a guided breathing exercise.</p>
+          <button
+            onClick={() => navigate("/breathinggame")}
+            className="inline-block bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition-colors duration-300"
+          >
+            Start Breathing Exercise
+          </button>
+        </div>
       </div>
+
+      {/* Music Recommendations Section */}
+      {musicPlaying && (
+        <div className="mt-8 bg-white shadow-xl rounded-lg p-6 transition-transform transform hover:scale-105 duration-300 ease-in-out border border-teal-500">
+          <h3 className="text-xl font-semibold text-teal-700 mb-4">Music Recommendations</h3>
+          <select
+            value={selectedMood}
+            onChange={(e) => setSelectedMood(e.target.value)}
+            className="w-full p-3 border border-teal-300 rounded-md mb-4"
+          >
+            <option value="">Select Mood</option>
+            {moods.map((mood) => (
+              <option key={mood} value={mood}>
+                {mood.charAt(0).toUpperCase() + mood.slice(1)}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={fetchRecommendations}
+            className="inline-block bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition-colors duration-300"
+          >
+            Get Recommendations
+          </button>
+
+          {error && <p className="text-red-500 mt-4">{error}</p>}
+          {recommendations.length > 0 && (
+            <div className="mt-6">
+              {recommendations.map((track) => (
+                <p key={track.name} className="text-teal-600">{track.name} - {track.artist.name}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Joke Section */}
+      {showJoke && (
+        <div className="mt-8 bg-white shadow-xl rounded-lg p-6 transition-transform transform hover:scale-105 duration-300 ease-in-out border border-teal-500">
+          <h3 className="text-xl font-semibold text-teal-700 mb-4">Joke of the Day</h3>
+          <p className="text-teal-500">{joke}</p>
+        </div>
+      )}
+
+      {/* Article Section */}
+      {showArticles && article && (
+        <div className="mt-8 bg-white shadow-xl rounded-lg p-6 transition-transform transform hover:scale-105 duration-300 ease-in-out border border-teal-500">
+          <h3 className="text-xl font-semibold text-teal-700 mb-4">Mental Health Article</h3>
+          <h4 className="text-teal-600 font-semibold">{article.title}</h4>
+          <p className="text-teal-500 mt-2">{article.description}</p>
+          <a
+            href={article.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-teal-600 hover:underline mt-4 inline-block"
+          >
+            Read Full Article
+          </a>
+        </div>
+      )}
     </div>
   );
 }
