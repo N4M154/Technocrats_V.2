@@ -6,19 +6,23 @@ import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
+import TrackMood from "./pages/track-mood";
+
 
 export default function App() {
   return (
     <BrowserRouter>
-      {/* header */}
-      <Header />
+      <Header/>
 
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
+        
+        <Route path="/track-mood" element={<TrackMood/>}/>
+
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
