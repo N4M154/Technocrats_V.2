@@ -109,14 +109,10 @@ export default function Profile() {
     }
   };
   return (
-    
     <div className="bg-white min-h-screen ">
       {/* header */}
-     
-      <div className="p-4 max-w-lg mx-auto  mb-2 p-5 rounded-lg shadow-lg">
-        
 
-
+      <div className="p-4 max-w-lg mx-auto  mb-2 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold text-center my-7 text-green-700">
           Profile
         </h1>
