@@ -6,14 +6,18 @@ import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
+import Footer from "./components/Footer";
+import BreathingGame from "./pages/BreathingGame";
 //import TrackMood from "./pages/track-mood";
 
 export default function App() {
   return (
     <BrowserRouter>
       {/* <Header /> */}
+      
 
       <Routes>
+        <Route path= "/breathinggame" element={<BreathingGame/>}/>
         <Route path="/" element={<SignIn />} />
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -25,6 +29,7 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import Header from "../components/Header";
 
 export default function Home() {
@@ -15,23 +15,22 @@ export default function Home() {
   ];
 
   const articles = [
-    "Mental Health Benefits of Exercise"
+    "Mental Health Benefits of Exercise",
   ];
 
   const fetchJoke = async () => {
-    // Replace with actual API call for jokes
     const response = await fetch("https://official-joke-api.appspot.com/random_joke");
     const data = await response.json();
     setJoke(data.setup + " - " + data.punchline);
     setShowJoke(true);
   };
 
+  const navigate = useNavigate(); // Use navigate hook
+
   return (
     <div className="bg-white min-h-screen flex flex-col items-center px-4 md:px-8">
-      {/* Main Content */}
       <Header />
 
-      {/* Track mood and sleep section */}
       <div className="mt-10 space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-teal-700 text-2xl font-bold">Track Your Mood and Sleep</h2>
@@ -51,7 +50,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Boost Your Mood section */}
         <div className="text-center space-y-6 mt-12">
           <h2 className="text-teal-700 text-2xl font-bold">Boost Your Mood</h2>
           <div className="space-x-4">
@@ -74,6 +72,16 @@ export default function Home() {
               Joke of the Day
             </button>
           </div>
+        </div>
+
+        {/* Breathing Exercise section */}
+        <div className="text-center mt-12">
+          <button
+            onClick={() => navigate("/breathinggame")} // Navigate to /breathinggame
+            className="bg-teal-600 text-white py-2 px-6 rounded-lg hover:bg-teal-500 transition duration-300"
+          >
+            Breathing Exercise
+          </button>
         </div>
 
         {/* Render Music Options */}
@@ -118,11 +126,6 @@ export default function Home() {
           </div>
         )}
       </div>
-
-      {/* Footer */}
-      <footer className="w-full text-center py-6 bg-gray-100 mt-10">
-        <p className="text-gray-600">&copy; 2024 YourApp. All rights reserved.</p>
-      </footer>
     </div>
   );
 }
