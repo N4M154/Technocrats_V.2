@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DiscreteSliderMarks from "../DiscreteSliderMarks";
-//import { Navbar2 } from "../Navbar2";
 import Swal from "sweetalert2";
 import Header from "../components/Header";
-//import { addMoodEntryAPI, getUserMoodAPI } from "../../utils/apiRequest";
+import { Radar } from "react-chartjs-2";
+import { Chart as ChartJS } from "chart.js/auto";
 
 const MoodLogger = () => {
   const [mood, setMood] = useState({
@@ -12,26 +12,9 @@ const MoodLogger = () => {
     energy: 50,
     focus: 50,
     calmness: 50,
-    description: "",
-    date: "",
   });
 
-  const [quote, setQuote] = useState("");
-  const [suggestion, setSuggestion] = useState("");
-
-  useEffect(() => {
-    const fetchMoodData = async () => {
-      try {
-        const moodData = await getUserMoodAPI();
-        if (moodData.length > 0) {
-          setMood(moodData[moodData.length - 1]); // Set the most recent mood
-        }
-      } catch (error) {
-        console.error("Error fetching mood data:", error);
-      }
-    };
-    fetchMoodData();
-  }, []);
+  const [showChart, setShowChart] = useState(false);
 
   const handleChange = (field, value) => {
     setMood((prev) => ({
@@ -40,90 +23,40 @@ const MoodLogger = () => {
     }));
   };
 
-  const getHighestMood = () => {
-    const moodScores = {
-      stress: mood.stress,
-      happiness: mood.happiness,
-      energy: mood.energy,
-      focus: mood.focus,
-      calmness: mood.calmness,
-    };
-    const highestMood = Object.keys(moodScores).reduce((a, b) =>
-      moodScores[a] > moodScores[b] ? a : b
-    );
-
-    return highestMood;
-  };
-
-  const getMoodQuote = (moodType) => {
-    const quotes = {
-      stress: "Take a deep breath. It’s just a bad day, not a bad life.",
-      happiness: "Happiness is not by chance, but by choice.",
-      energy: "Energy and persistence conquer all things.",
-      focus: "Focus on the journey, not the destination.",
-      calmness: "Keep calm and carry on.",
-    };
-    return quotes[moodType] || "Stay positive!";
-  };
-
-  const getMoodSuggestion = (moodType) => {
-    const suggestions = {
-      stress: "Try some meditation or deep breathing exercises to relax.",
-      happiness: "Keep spreading positivity and maybe share it with others!",
-      energy: "Channel that energy into a productive task or exercise!",
-      focus: "Use this focus to knock out some tasks or work on a project.",
-      calmness:
-        "Maintain this calmness by engaging in a peaceful activity like reading.",
-    };
-    return suggestions[moodType] || "Take care of yourself!";
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { calmness, date, description, energy, focus, happiness, stress } =
-      mood;
-    if (
-      !calmness ||
-      !date ||
-      !description ||
-      !energy ||
-      !focus ||
-      !happiness ||
-      !stress
-    ) {
+    const { stress, happiness, energy, focus, calmness } = mood;
+    if (!stress || !happiness || !energy || !focus || !calmness) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Please fill all fields!",
+        text: "Please fill all mood sliders!",
       });
       return;
     }
 
-    try {
-      const response = await addMoodEntryAPI(mood);
-      console.log("Mood entry successful", response);
+    // Generate the chart data
+    setShowChart(true);
+  };
 
-      const highestMood = getHighestMood();
-      const moodQuote = getMoodQuote(highestMood);
-      const moodSuggestion = getMoodSuggestion(highestMood);
-      setQuote(moodQuote);
-      setSuggestion(moodSuggestion);
-
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "Your mood entry has been logged successfully.",
-      });
-    } catch (error) {
-      console.error("Could not log mood:", error);
-
-      Swal.fire({
-        icon: "error",
-        title: "Error!",
-        text: "Could not log your mood. Please try again.",
-      });
-    }
+  const chartData = {
+    labels: ["Stress", "Happiness", "Energy", "Focus", "Calmness"],
+    datasets: [
+      {
+        label: "Mood",
+        data: [
+          mood.stress,
+          mood.happiness,
+          mood.energy,
+          mood.focus,
+          mood.calmness,
+        ],
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+    ],
   };
 
   return (
@@ -203,61 +136,6 @@ const MoodLogger = () => {
                   )
                 )}
               </div>
-              <div style={{ marginTop: "20px" }}>
-                <label
-                  style={{
-                    fontWeight: "bold",
-                    display: "block",
-                    marginBottom: "5px",
-                    color: "#333",
-                  }}
-                >
-                  Description
-                </label>
-                <textarea
-                  rows="4"
-                  placeholder="How are you feeling today?"
-                  value={mood.description}
-                  onChange={(e) => handleChange("description", e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    border: "1px solid #ccc",
-                    resize: "none",
-                    backgroundColor: "#f9f9f9",
-                    color: "#333",
-                  }}
-                />
-              </div>
-
-              <div style={{ marginTop: "10px" }}>
-                <label
-                  style={{
-                    fontWeight: "bold",
-                    display: "block",
-                    marginBottom: "5px",
-                    color: "#333",
-                  }}
-                >
-                  Date
-                </label>
-                <input
-                  max={new Date().toISOString().split("T")[0]}
-                  type="date"
-                  value={mood.date}
-                  onChange={(e) => handleChange("date", e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    border: "1px solid #ccc",
-                    backgroundColor: "#f9f9f9",
-                    color: "#333",
-                  }}
-                />
-              </div>
-
               <button
                 type="submit"
                 style={{
@@ -275,29 +153,15 @@ const MoodLogger = () => {
               </button>
             </form>
 
-            {quote && (
+            {showChart && (
               <div
                 style={{
-                  marginTop: "20px",
-                  textAlign: "center",
-                  color: "#333",
+                  marginTop: "30px",
+                  display: "flex",
+                  justifyContent: "center",
                 }}
               >
-                <h3>Your Mood Quote:</h3>
-                <p>{quote}</p>
-              </div>
-            )}
-
-            {suggestion && (
-              <div
-                style={{
-                  marginTop: "20px",
-                  textAlign: "center",
-                  color: "#333",
-                }}
-              >
-                <h3>Suggestion:</h3>
-                <p>{suggestion}</p>
+                <Radar data={chartData} options={{ responsive: true }} />
               </div>
             )}
           </div>
