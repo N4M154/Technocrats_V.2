@@ -1,3 +1,6 @@
+## LINK TO THE FINAL REPOSITORY
+[Technocrats_v.2.2](https://github.com/N4M154/Technocrats_V.2.2)
+
 # Soulace
 
 Welcome to Soulace – a comprehensive and user-friendly online platform designed to support your mental well-being journey. Whether you're looking for self-care resources, seeking guidance, or engaging with a supportive community, SoulCare offers everything you need to nurture your mental health.
