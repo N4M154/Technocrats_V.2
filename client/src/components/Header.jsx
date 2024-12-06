@@ -1,40 +1,57 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
-  
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   return (
-    <header className="pl-10 pr-10 bg-gray-200 text-white shadow-md">
-      <div className="container mx-auto px-4 flex justify-between items-center py-3">
+    <header className="bg-white text-teal-700  w-full">
+      <div className="container mx-auto px-4 flex justify-between items-center py-4">
+        {/* Logo */}
         <div className="flex items-center">
           <Link to="/home">
-            <img src="/Logo.png" width={180} height={100}/>
+            <img src="/Logo.png" width={100} height={80} alt="Logo" />
           </Link>
         </div>
 
+        {/* Navbar */}
         <nav className="hidden md:flex space-x-8">
           {currentUser && (
             <Link
-              to="/home"
-              className="text-green-800 hover:text-blue-500 transition duration-300 font-semibold mt-2 pr-5"
+              to="/community"
+              className="text-teal-700 hover:text-teal-500 transition duration-300 font-semibold mt-2"
             >
-              Home
+              Community
             </Link>
           )}
           {currentUser && (
+            
+              <Link
+                to="/analytics"
+                
+                className="text-teal-700 hover:text-teal-500 transition duration-300 font-semibold mt-2"
+              >
+                Analytics
+              </Link>
+              
+            
+          )}
+          
+          {currentUser && (
             <Link
               to="/about"
-              className="text-green-800 hover:text-blue-500 transition duration-300 font-semibold mt-2 pr-5"
+              className="text-teal-700 hover:text-teal-500 transition duration-300 font-semibold mt-2"
             >
               About
             </Link>
           )}
-          <Link
-            to="/profile"
-            className="flex items-center space-x-2 font-bold"
-          >
+          <Link to="/profile" className="flex items-center space-x-2 font-bold">
             {currentUser ? (
               <img
                 src={currentUser.profilePicture}
@@ -42,15 +59,16 @@ export default function Header() {
                 className="h-10 w-10 rounded-full object-cover"
               />
             ) : (
-              <span className="text-green-700 hover:text-gray-400 transition duration-300">
+              <span className="text-teal-700 hover:text-teal-500 transition duration-300">
                 Sign In
               </span>
             )}
           </Link>
         </nav>
 
+        {/* Mobile Menu Button */}
         <div className="md:hidden">
-          <button className="text-gray-300 focus:outline-none">
+          <button className="text-teal-500 focus:outline-none">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-8 w-8"
