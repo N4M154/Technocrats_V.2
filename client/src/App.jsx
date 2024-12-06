@@ -10,7 +10,8 @@ import Footer from "./components/Footer";
 import BreathingGame from "./pages/BreathingGame";
 import Community from "./pages/CommunityPage";
 import TrackMood from "./pages/MoodLogger";
-
+import SleepTracker from "./pages/SleepTracker";
+import { SliderValueLabel } from "@mui/material";
 export default function App() {
   return (
     <BrowserRouter>
@@ -26,6 +27,8 @@ export default function App() {
         <Route path="/community" element={<Community />} />
 
         <Route path="/track-mood" element={<TrackMood />} />
+        <Route path="/sleep" element={<SleepTracker />} />
+
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
