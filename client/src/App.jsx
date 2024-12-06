@@ -9,29 +9,28 @@ import PrivateRoute from "./components/PrivateRoute";
 import Footer from "./components/Footer";
 import BreathingGame from "./pages/BreathingGame";
 import Community from "./pages/CommunityPage";
-//import TrackMood from "./pages/track-mood";
+import TrackMood from "./pages/MoodLogger";
 
 export default function App() {
   return (
     <BrowserRouter>
       {/* <Header /> */}
-      
 
       <Routes>
-        <Route path= "/breathinggame" element={<BreathingGame/>}/>
+        <Route path="/breathinggame" element={<BreathingGame />} />
         <Route path="/" element={<SignIn />} />
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/community" element={<Community/>}/>
+        <Route path="/community" element={<Community />} />
 
-        {/* <Route path="/track-mood" element={<TrackMood />} /> */}
+        <Route path="/track-mood" element={<TrackMood />} />
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
-      <Footer/>
+      <Footer />
     </BrowserRouter>
   );
 }
